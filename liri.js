@@ -37,15 +37,69 @@ console.log("This is user Request ", userRequest);
 // if or switch statement to check user command 
 switch (userCommand) {
   case "concert-this":
-    console.log("concert");
+     var queryUrl = "https://rest.bandsintown.com/artists/" + userRequest + "/events?app_id=codingbootcamp"; 
+     console.log(queryUrl);
+      
+     axios.get(queryUrl).then(
+       function(response) {   
+        console.log("Venue: " + response.data[1])
+        console.log("Location: " + response.data[1]);
+        console.log("Date: " + response.data[2][1]);
+
+
+    
+       })
     break;
 
   case "spotify-this-song":
-    console.log("spotify"); 
-    break;  
-
+      // spotify.search({ type: 'track', query: 'All the Small Things' }, 
+      // function(err, data) {
+      //   if (err) {
+      //     return console.log('Error occurred: ' + err);
+      //   }
+       
+      // console.log(data); 
+      // });
+       break; 
   case "movie-this":
-    console.log("movie"); 
+      var queryUrl = "http://www.omdbapi.com/?t=" + userRequest + "&y=&plot=short&apikey=trilogy";
+      // This line is just to help us debug against the actual URL.
+      console.log(queryUrl);
+      
+      axios.get(queryUrl).then(
+        function(response) {
+          console.log("Title: " + response.data.Title)
+          console.log("Release Year: " + response.data.Year);
+          console.log("IMDB Rating: " + response.data.imdbRating);
+          console.log("Release Year: " + response.data.Year);
+          console.log("Country: " + response.data.Country);
+          console.log("Language: " + response.data.Language);
+          console.log("Plot: " + response.data.Plot);
+          console.log("Actors: " + response.data.Actors);
+          console.log("Rotten Tomatoes: ", response.data.Ratings[1]); 
+          
+          // console.log(response)
+        })
+        .catch(function(error) {
+          if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log("---------------Data---------------");
+            console.log(error.response.data);
+            console.log("---------------Status---------------");
+            console.log(error.response.status);
+            console.log("---------------Status---------------");
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an object that comes back with details pertaining to the error that occurred.
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", error.message);
+          }
+          console.log(error.config);
+        });
     break; 
     
   default: 

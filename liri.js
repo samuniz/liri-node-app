@@ -16,7 +16,7 @@ console.log(userCommand);
 // Store all of the arguments in an array
 var nodeArgs = process.argv;
 
-// Create an empty variable for holding the movie name
+// Create an empty variable for holding the user request
 var userRequest = "";
 
 // Loop through all the words in the node argument
@@ -33,7 +33,25 @@ for (var i = 3; i < nodeArgs.length; i++) {
 
 console.log("This is user Request ", userRequest); 
 
+
 // if or switch statement to check user command 
+switch (userCommand) {
+  case "concert-this":
+    console.log("concert");
+    break;
+
+  case "spotify-this-song":
+    console.log("spotify"); 
+    break;  
+
+  case "movie-this":
+    console.log("movie"); 
+    break; 
+    
+  default: 
+    console.log("no command"); 
+    
+}  
   // run API call using Axios to bands in town API
   // inject the user's search term i que queryURL
     // see instructions

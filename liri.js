@@ -3,6 +3,8 @@ var keys= require("./keys.js");
 var Spotify = require('node-spotify-api'); 
 var spotify = new Spotify(keys.spotify); 
 var axios = require("axios"); 
+var moment = require('moment');
+
 
 // capture the comand that user puts in 
 
@@ -45,11 +47,11 @@ switch (userCommand) {
       for (var i= 0; i < response.data.length; i++) {
         var jsonData = response.data[i];
         var concertData = 
-          "Venue: " + jsonData.venue.name +
+        "------------------------------------" +
+          "\nVenue: " + jsonData.venue.name +
           "\nLocation: " + jsonData.venue.country + jsonData.venue.region + jsonData.venue.country +
-          "\nDate: " + jsonData.venue.datetime + "\n------------------------------------";
-       
-
+          "\nDate: " + moment(jsonData.venue.datetime).format("MM/DD/YYYY") + 
+          "\n------------------------------------";
         console.log(concertData);
         }
         
@@ -65,9 +67,13 @@ switch (userCommand) {
         }
         for (var i= 0; i < data.tracks.items.length; i++) {
           var spotifyData = data.tracks.items[i];
-          var songData = "Artist: " + spotifyData.artists[0].name + "\n Song: " + spotifyData.name + 
+          var songData = 
+          "------------------------------------------" +
+          "\nArtist: " + spotifyData.artists[0].name + 
+          "\n Song: " + spotifyData.name + 
           "\n Spotify Link: " + spotifyData.album.spotify +
-          "\nAlbum: " + spotifyData.album.name + "\n------------------------------------------";
+          "\nAlbum: " + spotifyData.album.name + 
+          "\n------------------------------------------";
 
           console.log(songData); 
         }
@@ -76,32 +82,29 @@ switch (userCommand) {
        break; 
 
 
-  //      * Artist(s)
-
-  //    * The song's name
-
-  //    * A preview link of the song from Spotify
-
-  //    * The album that the song is from
-
-  //  * If no song is provided then your program will default to "The Sign" by Ace of Base.
-
 
   case "movie-this":
+      
       var queryUrl = "http://www.omdbapi.com/?t=" + userRequest + "&y=&plot=short&apikey=trilogy";
       // This line is just to help us debug against the actual URL.
       console.log(queryUrl);
       
       axios.get(queryUrl).then(
         function(response) {
-          console.log("Title: " + response.data.Title)
-          console.log("Release Year: " + response.data.Year);
-          console.log("IMDB Rating: " + response.data.imdbRating);
-          console.log("Country: " + response.data.Country);
-          console.log("Language: " + response.data.Language);
-          console.log("Plot: " + response.data.Plot);
-          console.log("Actors: " + response.data.Actors);
-          console.log("Rotten Tomatoes: ", response.data.Ratings[1]); 
+          var movieData =
+          "------------------------------------------" +
+          "\nTitle: " + response.data.Title +
+          "\nRelease Year: " + response.data.Year +
+          "\nIMDB Rating: " + response.data.imdbRating +
+          "\nCountry: " + response.data.Country +
+          "\nLanguage: " + response.data.Language +
+          "\nPlot: " + response.data.Plot +
+          "\nActors: " + response.data.Actors +
+          "\nRotten Tomatoes: " + response.data.Ratings[1] + 
+          "\n------------------------------------------";
+
+          console.log(movieData); 
+
         })
 
         .catch(function(error) {
@@ -125,22 +128,15 @@ switch (userCommand) {
           console.log(error.config);
         });
     break; 
-    
+    case "do-what-it-says":
+      console.log("Do what says")
+      break;
+
   default: 
-    console.log("no command"); 
+    console.log("Try again!"); 
     
 }  
-  // run API call using Axios to bands in town API
-  // inject the user's search term i que queryURL
-    // see instructions
-    // Display name of venue, venue location and the date of the event(use moment to format the date  MM/DD/yyyt)
-
-// check if user command is "concert-this"
-
-// check if user command is "spotify-this-song"
-
-// check if user commands is "movie-this"
-
+  
 // check if user command is "do-what-it-says"
 
 

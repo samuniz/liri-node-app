@@ -42,12 +42,12 @@ switch (userCommand) {
        function(response) { 
 
       //loop to show me how many, inside the loop I log the date, venue ... (same for spotify)
-      for (i= 0; i < response.data.length; i++) {
+      for (var i= 0; i < response.data.length; i++) {
         var jsonData = response.data[i];
         var concertData = 
           "Venue: " + jsonData.venue.name +
           "\nLocation: " + jsonData.venue.country + jsonData.venue.region + jsonData.venue.country +
-          "\nDate: " + jsonData.venue.date;
+          "\nDate: " + jsonData.venue.datetime + "\n------------------------------------";
        
 
         console.log(concertData);
@@ -57,16 +57,34 @@ switch (userCommand) {
     break;
 
   case "spotify-this-song":
-    console.log("This is the spotify switch case");
-      spotify.search({ type: 'track', query: 'All the Small Things' }, 
+    // console.log("This is the spotify switch case");
+      spotify.search({ type: 'track', query: userRequest }, 
       function(err, data) {
         if (err) {
           return console.log('Error occurred: ' + err);
         }
-       
-      console.log(data.tracks.items[0]); 
+        for (var i= 0; i < data.tracks.items.length; i++) {
+          var spotifyData = data.tracks.items[i];
+          var songData = "Artist: " + spotifyData.artists[0].name + "\n Song: " + spotifyData.name + 
+          "\n Spotify Link: " + spotifyData.album.spotify +
+          "\nAlbum: " + spotifyData.album.name + "\n------------------------------------------";
+
+          console.log(songData); 
+        }
+        
       });
        break; 
+
+
+  //      * Artist(s)
+
+  //    * The song's name
+
+  //    * A preview link of the song from Spotify
+
+  //    * The album that the song is from
+
+  //  * If no song is provided then your program will default to "The Sign" by Ace of Base.
 
 
   case "movie-this":

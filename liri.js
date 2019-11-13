@@ -22,16 +22,14 @@ var userRequest = "";
 // Loop through all the words in the node argument
 // And do a little for-loop magic to handle the inclusion of "+"s
 for (var i = 3; i < nodeArgs.length; i++) {
-
   if (i > 3 && i < nodeArgs.length) {
     userRequest = userRequest + "+" + nodeArgs[i];
   } else {
     userRequest += nodeArgs[i];
-
   }
 } 
 
-console.log("This is user Request ", userRequest); 
+// console.log("This is user Request ", userRequest); 
 
 
 // if or switch statement to check user command 
@@ -41,26 +39,36 @@ switch (userCommand) {
      console.log(queryUrl);
       
      axios.get(queryUrl).then(
-       function(response) {   
-        console.log("Venue: " + response.data[1])
-        console.log("Location: " + response.data[1]);
-        console.log("Date: " + response.data[2][1]);
+       function(response) { 
 
+      //loop to show me how many, inside the loop I log the date, venue ... (same for spotify)
+      for (i= 0; i < response.data.length; i++) {
+        var jsonData = response.data[i];
+        var concertData = 
+          "Venue: " + jsonData.venue.name +
+          "\nLocation: " + jsonData.venue.country + jsonData.venue.region + jsonData.venue.country +
+          "\nDate: " + jsonData.venue.date;
+       
 
-    
-       })
+        console.log(concertData);
+        }
+        
+       });
     break;
 
   case "spotify-this-song":
-      // spotify.search({ type: 'track', query: 'All the Small Things' }, 
-      // function(err, data) {
-      //   if (err) {
-      //     return console.log('Error occurred: ' + err);
-      //   }
+    console.log("This is the spotify switch case");
+      spotify.search({ type: 'track', query: 'All the Small Things' }, 
+      function(err, data) {
+        if (err) {
+          return console.log('Error occurred: ' + err);
+        }
        
-      // console.log(data); 
-      // });
+      console.log(data.tracks.items[0]); 
+      });
        break; 
+
+
   case "movie-this":
       var queryUrl = "http://www.omdbapi.com/?t=" + userRequest + "&y=&plot=short&apikey=trilogy";
       // This line is just to help us debug against the actual URL.
@@ -71,15 +79,13 @@ switch (userCommand) {
           console.log("Title: " + response.data.Title)
           console.log("Release Year: " + response.data.Year);
           console.log("IMDB Rating: " + response.data.imdbRating);
-          console.log("Release Year: " + response.data.Year);
           console.log("Country: " + response.data.Country);
           console.log("Language: " + response.data.Language);
           console.log("Plot: " + response.data.Plot);
           console.log("Actors: " + response.data.Actors);
           console.log("Rotten Tomatoes: ", response.data.Ratings[1]); 
-          
-          // console.log(response)
         })
+
         .catch(function(error) {
           if (error.response) {
             // The request was made and the server responded with a status code

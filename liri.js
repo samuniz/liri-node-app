@@ -4,7 +4,7 @@ var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify); 
 var axios = require("axios"); 
 var moment = require('moment');
-
+var fs = require("fs");
 
 // capture the comand that user puts in 
 
@@ -32,7 +32,28 @@ for (var i = 3; i < nodeArgs.length; i++) {
 } 
 
 // console.log("This is user Request ", userRequest); 
+/* FUNCTIONS */
+function mySpotify(){
+  spotify.search({ type: 'track', query: userRequest }, 
+  function(err, data) {
+    if (err) {
+      return console.log('Error occurred: ' + err);
+    }
+    for (var i= 0; i < data.tracks.items.length; i++) {
+      var spotifyData = data.tracks.items[i];
+      var songData = 
+      "------------------------------------------" +
+      "\nArtist: " + spotifyData.artists[0].name + 
+      "\n Song: " + spotifyData.name + 
+      "\n Spotify Link: " + spotifyData.album.spotify +
+      "\nAlbum: " + spotifyData.album.name + 
+      "\n------------------------------------------";
 
+      console.log(songData); 
+    }
+    
+  });
+};
 
 // if or switch statement to check user command 
 switch (userCommand) {
@@ -60,31 +81,20 @@ switch (userCommand) {
 
   case "spotify-this-song":
     // console.log("This is the spotify switch case");
-      spotify.search({ type: 'track', query: userRequest }, 
-      function(err, data) {
-        if (err) {
-          return console.log('Error occurred: ' + err);
-        }
-        for (var i= 0; i < data.tracks.items.length; i++) {
-          var spotifyData = data.tracks.items[i];
-          var songData = 
-          "------------------------------------------" +
-          "\nArtist: " + spotifyData.artists[0].name + 
-          "\n Song: " + spotifyData.name + 
-          "\n Spotify Link: " + spotifyData.album.spotify +
-          "\nAlbum: " + spotifyData.album.name + 
-          "\n------------------------------------------";
-
-          console.log(songData); 
-        }
-        
-      });
+       console.log("This is the user request", userRequest);
+       if(userRequest.length == 0){
+         userRequest= "The Sign Ace of Base";
+       }
+      mySpotify();
+       
        break; 
 
 
 
   case "movie-this":
-      
+      if(userRequest.length == 0){
+        userRequest= "Mr Nobody";
+      }
       var queryUrl = "http://www.omdbapi.com/?t=" + userRequest + "&y=&plot=short&apikey=trilogy";
       // This line is just to help us debug against the actual URL.
       console.log(queryUrl);
@@ -128,17 +138,32 @@ switch (userCommand) {
           console.log(error.config);
         });
     break; 
-    case "do-what-it-says":
-      console.log("Do what says")
-      break;
+  
+   case "do-what-it-says":
+      fs.readFile('./random.txt',"utf-8", function (err, data) {
+        
+        if (err) throw err;
+        // console.log(data.split(","));
+        userRequest= data.split(",")[1];
+        console.log(userRequest);
+        mySpotify();
+      });
+     break; 
+      
 
   default: 
     console.log("Try again!"); 
     
 }  
+
+/* function that logs the user request */
+var fs = require("fs");
+fs.appendFile("log.txt", userRequest + "\n", function(error) {
+  if (error) {
+    return console.log(error);
+  }
+  console.log("log.txt was updated!");
+
+});
   
-// check if user command is "do-what-it-says"
 
-
-// fallback function 
-// otherwise, display message to the user "Try again"
